@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>unibar example</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="unibar.js"></script>
+    <style>
+        body {
+            font-family: "Arial Unicode MS";
+            font-size: 1em;
+            line-height: 2em;
+        }
+        #debug {
+            float: right;
+            position: fixed;
+            top: 0;
+            right: 1em;
+            line-height: 1.2em;
+        }
+        .unibar {
+            font-family: "Arial Unicode MS";
+            font-size: 1em;
+            color: dodgerblue;
+        }
+        pre {
+            font-family: "Arial Unicode MS";
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+
+<body>
+<div id="debug">
+    <p id="hint"></p>
+    <pre id="data"></pre>
+</div>
+<div id="chart"></div>
+<script>
+    jQuery(document).ready(function(){
+        var scale = 100;
+        var widthBlockCharacters = 25;
+        var stepSize = 0.5;
+        var bar;
+        for ( var i = scale; i > 0; i -= stepSize ) {
+            bar = unibar(i,scale,widthBlockCharacters);
+            jQuery('#chart').append( '<span class="unibar" data-bar=\'' + JSON.stringify(bar) + '\'>' + bar.text +
+                    '</span> = ' + i + '<br>');
+        }
+        jQuery('#hint').html('<p>For details hover the bars</p>');
+        jQuery('.unibar').hover(function(){
+            jQuery('#data').html( JSON.stringify( jQuery(this).data('bar'), null, "  " ) );
+        });
+    });
+</script>
+</body>
+</html>
