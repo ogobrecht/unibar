@@ -5,7 +5,7 @@ UniBar is a small helper function to calculate a bar consisting of unicode block
 There are two implementations available:  
 
 1. A JavaScript function
-2. A Oracle SQL function (coming soon...)
+2. A Oracle SQL function
 
 Why should you use a bar based on text instead of one of the famous HTML 5 chart libraries?
 
@@ -19,8 +19,8 @@ Why should you use a bar based on text instead of one of the famous HTML 5 chart
 There are three parameters:
 
 1. value: your bar value
-2. scale: the 100% value
-3. widthBlockCharacters: the width of a 100% bar as a number of characters 
+2. scale: the 100% value for a full bar width, default is 1 
+3. widthBlockCharacters: the width of a 100% bar as a number of characters, default is 25
 
 The function returns an object - try it in your browser console:
 
