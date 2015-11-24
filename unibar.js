@@ -7,7 +7,7 @@ unibar = function(value, scale, widthBlockCharacters) {
         r.value = value; // input value should be present in return object r
 
         // set defaults
-        r.scale = scale || 100;
+        r.scale = scale || 1;
         r.widthBlockCharacters = widthBlockCharacters || 25;
 
         // calculate the value of one character
