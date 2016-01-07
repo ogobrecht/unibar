@@ -1,78 +1,54 @@
-unibar = function(value, scale, widthBlockCharacters) {
+unibar = function(p_value, p_scale, p_width_block_characters, p_fill_scale) {
+    var v_return = '', v_value_one_character, v_full_block_characters, v_fill_characters, i;
 
-    if (value) {
-
-        // initialise variables
-        var i, r = {};
-        r.value = value; // input value should be present in return object r
+    if (p_value) {
 
         // set defaults
-        r.scale = scale || 1;
-        r.widthBlockCharacters = widthBlockCharacters || 25;
+        if (!p_scale) p_scale = 1;
+        if (!p_width_block_characters) p_width_block_characters = 25;
+        if (!p_fill_scale) p_fill_scale = 0;
 
         // calculate the value of one character
-        r.valueOfOneCharacter = r.scale / r.widthBlockCharacters;
-
-        // calculate maximum possible precision - 8 block characters with different width are available
-        r.maxPossiblePrecision = r.scale / ( r.widthBlockCharacters * 8 );  //
-
-        // calculate number of full block characters
-        r.numFullBlockCharacters = Math.floor(value / r.valueOfOneCharacter);
-
-        // calculate the value of the last block - can be between 0 and 8(rounded), because there are block character
-        // available in unicode for 1/8, 1/4, 3/8, 1/2, 5/8, 3/4, 7/8 and 1;
-        r.lastBlock = Math.round(
-            ( value / r.valueOfOneCharacter - Math.floor( value / r.valueOfOneCharacter ) ) / 0.125
-        );
+        v_value_one_character = p_scale / p_width_block_characters;
 
         // create textbar: full block characters
-        r.text = '';
-        for (i = 0; i < r.numFullBlockCharacters; i++) {
-            r.text += '\u2588';
+        v_full_block_characters = Math.floor(p_value / v_value_one_character);
+        for (i = 0; i < v_full_block_characters; i++) {
+            v_return += '\u2588';
         }
 
-        // create textbar: last character
-        switch (r.lastBlock) {
-            case 0:
-                r.lastBlock = '0 = no char';
-                break;
-            case 1:
-                r.text += '\u258F';
-                r.lastBlock = '1/8 = char U+258F';
-                break;
-            case 2:
-                r.text += '\u258E';
-                r.lastBlock = '2/8 = char U+258E';
-                break;
-            case 3:
-                r.text += '\u258D';
-                r.lastBlock = '3/8 = char U+258D';
-                break;
-            case 4:
-                r.text += '\u258C';
-                r.lastBlock = '4/8 = char U+258C';
-                break;
-            case 5:
-                r.text += '\u258B';
-                r.lastBlock = '5/8 = char U+258B';
-                break;
-            case 6:
-                r.text += '\u258A';
-                r.lastBlock = '6/8 = char U+258A';
-                break;
-            case 7:
-                r.text += '\u2589';
-                r.lastBlock = '7/8 = char U+2589';
-                break;
-            case 8:
-                r.text += '\u2588';
-                r.lastBlock = '8/8 = char U+2588';
-                break;
+        // create textbar: last character - can be between 0 and 8(rounded), because there
+        // are block character available in unicode for 1/8, 1/4, 3/8, 1/2, 5/8, 3/4, 7/8 and 1;
+        switch ( Math.round(   (   p_value / v_value_one_character
+                                 - Math.floor( p_value / v_value_one_character ) )
+                             / 0.125 ) ) {
+            case 1: // 1/8 = char U+258F
+                v_return += '\u258F'; break;
+            case 2: // 2/8 = char U+258E
+                v_return += '\u258E'; break;
+            case 3: // 3/8 = char U+258D
+                v_return += '\u258D'; break;
+            case 4: // 4/8 = char U+258C
+                v_return += '\u258C'; break;
+            case 5: // 5/8 = char U+258B
+                v_return += '\u258B'; break;
+            case 6: // 6/8 = char U+258A
+                v_return += '\u258A'; break;
+            case 7: // 7/8 = char U+2589
+                v_return += '\u2589'; break;
+            case 8: // 8/8 = char U+2588
+                v_return += '\u2588'; break;
         }
-
 
     }
 
-    return r || null;
+    // fill up scale with shade
+    if (p_fill_scale == 1) {
+        v_fill_characters = p_width_block_characters - v_return.length;
+        for (i = 0; i < v_fill_characters; i++) {
+            v_return += '\u2591';
+        }
+    }
 
+    return v_return;
 };

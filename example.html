@@ -5,53 +5,56 @@
     <meta charset="utf-8">
     <title>unibar example</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="unibar.js"></script>
+    <script src="unibar.min.js"></script>
     <style>
         body {
             font-family: "Arial Unicode MS";
             font-size: 1em;
-            line-height: 2em;
         }
-        #debug {
-            float: right;
-            position: fixed;
-            top: 0;
-            right: 1em;
-            line-height: 1.2em;
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            border: 1px solid grey;
+            padding: 0.2em;
         }
         .unibar {
             font-family: "Arial Unicode MS";
             font-size: 1em;
             color: dodgerblue;
         }
-        pre {
-            font-family: "Arial Unicode MS";
-            font-size: 0.8em;
-        }
     </style>
 </head>
 
 <body>
-<div id="debug">
-    <p id="hint"></p>
-    <pre id="data"></pre>
-</div>
+<p>This example shows how a unicode bar chart is looking - with or without filling the scale.</p>
+<ul>
+    <li>p_scale: 100</li>
+    <li>p_width_block_characters: 25</li>
+    <li>There are 8 different block characters available: 1/8, 1/4, 3/8, 1/2, 5/8, 3/4, 7/8 and 1</li>
+    <li>The value of one block character is then 4 (100 / 25) - you can see this easily on the missing white
+        space after a non full block when the scale is filled with shade</li>
+    <li>The maximum precision is then 0.5 (4 / 8)</li>
+</ul>
 <div id="chart"></div>
 <script>
     jQuery(document).ready(function(){
-        var scale = 100;
-        var widthBlockCharacters = 25;
-        var stepSize = 0.5;
-        var bar;
+        var html = '<table><tr><th>Fill Scale</th><th>Value</th><th>Do Not Fill Scale</th></tr>',
+            stepSize = 0.5,
+            scale = 100,
+            widthBlockCharacters = 25,
+            fillScale = 1,
+            notFillScale = 0;
+
         for ( var i = scale; i > 0; i -= stepSize ) {
-            bar = unibar(i,scale,widthBlockCharacters);
-            jQuery('#chart').append( '<span class="unibar" data-bar=\'' + JSON.stringify(bar) + '\'>' + bar.text +
-                    '</span> = ' + i + '<br>');
+            html += '<tr><td class="unibar">' +
+                unibar(i,scale,widthBlockCharacters,fillScale) +
+                '</td><td>' + i + '</td><td class="unibar">' +
+                unibar(i,scale,widthBlockCharacters,notFillScale) +
+                '</td></tr>';
         }
-        jQuery('#hint').html('<p>For details hover the bars</p>');
-        jQuery('.unibar').hover(function(){
-            jQuery('#data').html( JSON.stringify( jQuery(this).data('bar'), null, "  " ) );
-        });
+
+        jQuery('#chart').append(html + '</table>');
     });
 </script>
 </body>
