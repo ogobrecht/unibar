@@ -8,7 +8,7 @@ IS
    v_return              VARCHAR2( 1000 );
    v_value_one_character NUMBER;
 BEGIN
-   IF p_value IS NOT NULL THEN
+   IF NVL( p_value, 0 ) != 0 THEN
       -- calculate the value of one character
       v_value_one_character := p_scale / p_width_block_characters;
 
@@ -19,9 +19,7 @@ BEGIN
 
       -- create textbar: last character - can be between 0 and 8(rounded), because there
       -- are block character available in unicode for 1/8, 1/4, 3/8, 1/2, 5/8, 3/4, 7/8 and 1;
-      CASE ROUND(   (   p_value / v_value_one_character
-                      - FLOOR( p_value / v_value_one_character ) )
-                  / 0.125 )
+      CASE ROUND( ( p_value / v_value_one_character - FLOOR( p_value / v_value_one_character ) ) / 0.125 )
          WHEN 1 THEN -- 1/8 = char U+258F
             v_return := v_return || UNISTR( '\258F' );
          WHEN 2 THEN -- 2/8 = char U+258E
