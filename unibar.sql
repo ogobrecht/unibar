@@ -8,7 +8,7 @@ IS
    v_return              VARCHAR2( 1000 );
    v_value_one_character NUMBER;
 BEGIN
-   IF NVL( p_value, 0 ) != 0 THEN
+   IF p_value IS NOT NULL THEN
       -- calculate the value of one character
       v_value_one_character := p_scale / p_width_block_characters;
 
@@ -39,13 +39,13 @@ BEGIN
          ELSE
             NULL;
       END CASE;
-   END IF;
 
-   -- fill up scale with shade
-   IF p_fill_scale = 1 THEN
-      FOR i IN 1 .. ( p_width_block_characters - LENGTH( v_return ) ) LOOP
-         v_return := v_return || UNISTR( '\2591' );
-      END LOOP;
+      -- fill up scale with shade
+      IF p_fill_scale = 1 THEN
+         FOR i IN 1 .. ( p_width_block_characters - NVL( LENGTH( v_return ), 0 ) ) LOOP
+            v_return := v_return || UNISTR( '\2591' );
+         END LOOP;
+      END IF;
    END IF;
 
    RETURN v_return;
